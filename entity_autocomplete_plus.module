@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains entity_autocomplete_plus.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function entity_autocomplete_plus_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the entity_autocomplete_plus module.
+    case 'help.page.entity_autocomplete_plus':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Let the entity autocomplete matcher provide additional information to the user') . '</p>';
+      return $output;
+
+    default:
+  }
+}
