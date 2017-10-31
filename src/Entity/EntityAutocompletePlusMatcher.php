@@ -47,6 +47,9 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
     $handler = $this->selectionManager->getInstance($options);
     $storage_controller = $this->entityManager->getStorage($target_type);
 
+    $config = \Drupal::config('entity_autocomplete_plus.settings');
+    $token_string = $config->get('token_string')? $config->get('token_string') : '';
+
     if (isset($string)) {
       // Get an array of matching entities.
       $match_operator = !empty($selection_settings['match_operator']) ? $selection_settings['match_operator'] : 'CONTAINS';
@@ -55,10 +58,9 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
       // Loop through the entities and convert them into autocomplete output.
       foreach ($entity_labels as $values) {
         foreach ($values as $entity_id => $label) {
-          $info = $this->getEntityInfo($storage_controller, $target_type, $entity_id);
-          $path = $info['path'];
+          $info = $this->getEntityInfo($storage_controller, $token_string, $target_type, $entity_id);
           $key = "$label ($entity_id)"; // probably don't mess with the key in case this is saved verbatim
-          $label = "$label - $path ($entity_id)";
+          $label = "$label - $info ($entity_id)";
           // Strip things like starting/trailing white spaces, line breaks and
           // tags.
           $key = preg_replace('/\s\s+/', ' ', str_replace("\n", '', trim(Html::decodeEntities(strip_tags($key)))));
@@ -73,19 +75,18 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
   }
 
   /*
-   * return information about the entity for use in the matcher UI
-   *  - 'path': the Url::toString() representation for the entity
+   * return information about the entity for use in the matcher UI based on the token string
    */
-  private function getEntityInfo($storage_controller, $target_type, $entity_id) {
-    $info = [];
+  private function getEntityInfo($storage_controller, $token_string, $target_type, $entity_id) {
+    $info = '';
 
-    $cid = 'entity_autocomplete_plus.' . $target_type . '.' . $entity_id;
+    $cid = 'entity_autocomplete_plus.' . $target_type . '.' . $entity_id . '.' . md5($token_string);
     if ($cache = \Drupal::cache()->get($cid)) {
       $info = $cache->data;
     }
     else {
       $entity = $storage_controller->load($entity_id);
-      $info['path'] = $entity->toUrl()->toString();
+      $info = \Drupal::token()->replace($token_string, [$target_type => $entity]);
       \Drupal::cache()->set($cid, $info);
     }
 
