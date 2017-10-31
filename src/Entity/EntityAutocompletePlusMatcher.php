@@ -55,8 +55,7 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
       // Loop through the entities and convert them into autocomplete output.
       foreach ($entity_labels as $values) {
         foreach ($values as $entity_id => $label) {
-          // TODO: override the handler as well and only load the entity once
-          $info = $this->getEntityInfo($storage_controller, $entity_id);
+          $info = $this->getEntityInfo($storage_controller, $target_type, $entity_id);
           $path = $info['path'];
           $key = "$label ($entity_id)"; // probably don't mess with the key in case this is saved verbatim
           $label = "$label - $path ($entity_id)";
@@ -77,11 +76,18 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
    * return information about the entity for use in the matcher UI
    *  - 'path': the Url::toString() representation for the entity
    */
-  private function getEntityInfo($storage_controller, $entity_id) {
+  private function getEntityInfo($storage_controller, $target_type, $entity_id) {
     $info = [];
 
-    $entity = $storage_controller->load($entity_id);
-    $info['path'] = $entity->toUrl()->toString();
+    $cid = 'entity_autocomplete_plus.' . $target_type . '.' . $entity_id;
+    if ($cache = \Drupal::cache()->get($cid)) {
+      $info = $cache->data;
+    }
+    else {
+      $entity = $storage_controller->load($entity_id);
+      $info['path'] = $entity->toUrl()->toString();
+      \Drupal::cache()->set($cid, $info);
+    }
 
     return $info;
   }
