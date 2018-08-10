@@ -49,6 +49,12 @@ class EntityAutocompletePlusSettingsForm extends ConfigFormBase {
       '#maxlength' => 60,
       '#description' => t("Token string to include in entity reference matcher."),
     );
+    $form['token_string']['browser'] = [
+      '#theme' => 'token_tree_link',
+      '#global_types' => TRUE,
+      '#show_nested' => FALSE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
