@@ -41,24 +41,7 @@ class EntityAutocompletePlusSettingsForm extends ConfigFormBase {
         ' type' => 'number', // insert space before attribute name :)
       ),
     );
-    $token_tree = [
-      '#theme' => 'token_tree_link',
-      '#token_types' => 'all',
-    ];
-    $rendered_token_tree = \Drupal::service('renderer')->render($token_tree);
-    $form['token_string'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Append token string'),
-      '#default_value' => $admin_configurations->get('token_string') ? $admin_configurations->get('token_string') : '',
-      '#size' => 60,
-      '#maxlength' => 60,
-      '#description' => t("Token string to include in entity reference matcher. @browse_link", [
-        '@browse_link' => $rendered_token_tree,
-      ]),
-    );
-    
-    
-
+  
     return parent::buildForm($form, $form_state);
   }
 
