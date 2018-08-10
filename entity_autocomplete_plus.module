@@ -36,24 +36,45 @@ function entity_autocomplete_plus_field_widget_third_party_settings_form(WidgetI
   if ($type == 'entity_reference') {
     // autocomplete or IEF
     if ($plugin_id == 'entity_reference_autocomplete' || strpos($plugin_id, 'inline_entity_form') === 0) {
+      $field_settings = $field_definition->getSettings();
+      $entity_type = $field_settings['target_type'];
       $token_entity_mapper = \Drupal::service('token.entity_mapper');
-      $mapped_entity = $token_entity_mapper->getTokenTypeForEntityType($entity->getEntityTypeId());
-      $token_tree = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => [$mapped_entity],
-        'global_types' => FALSE,
-      ];
-      $rendered_token_tree = \Drupal::service('renderer')->render($token_tree);
-      $form['token_string'] = array(
+      $mapped_entity = $token_entity_mapper->getTokenTypeForEntityType($entity_type);
+      $element['token_string'] = [
         '#type' => 'textfield',
         '#title' => t('Append token string to autocomplete'),
         '#default_value' => $settings['token_string'] ? $settings['token_string'] : '',
         '#size' => 60,
         '#maxlength' => 60,
-        '#description' => t("Token string to include in entity reference matcher. @browse_link", [
-          '@browse_link' => $rendered_token_tree,
-        ]),
-      );
+        '#description' => t("Token string to include in entity reference matcher."),
+      ];
+      $element['token_tree'] = [
+        '#theme' => 'token_tree_link',
+        '#token_types' => [$mapped_entity],
+        'global_types' => FALSE,
+      ];
+    }
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+*/
+function entity_autocomplete_plus_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+  $field_definition = $context['items']->getFieldDefinition();
+  $type = $context['items']->getFieldDefinition()->getType();
+
+  if ($type == 'entity_reference') {
+    $settings = $context['widget']->getThirdPartySettings('entity_autocomplete_plus');
+    if (empty($settings)) {
+      return;
+    }
+
+    if (isset($settings['token_string']) && $settings['token_string']) {
+      // inject the token string
+      $element['target_id']['#selection_settings']['token_string_suffix'] = $settings['token_string'];
     }
   }
 }

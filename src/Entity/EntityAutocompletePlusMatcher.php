@@ -45,7 +45,7 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
     $storage_controller = $this->entityManager->getStorage($target_type);
 
     $config = \Drupal::config('entity_autocomplete_plus.settings');
-    $token_string = $config->get('token_string')? $config->get('token_string') : '';
+    $token_string = isset($selection_settings['token_string_suffix'])? $selection_settings['token_string_suffix'] : '';
     $n_match = $config->get('number_of_matches')? $config->get('number_of_matches') : 10;
 
     if (isset($string)) {
