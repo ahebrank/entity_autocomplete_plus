@@ -1,2 +1,1 @@
-This module overrides the core entity autocomplete matcher, currently just 
-to inject the path and entity ID in the list of results.
+This module overrides the core entity autocomplete matcher, globally injecting tokens into the autocomplete results.
