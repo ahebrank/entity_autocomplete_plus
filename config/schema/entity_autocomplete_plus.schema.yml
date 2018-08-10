@@ -4,3 +4,5 @@ entity_autocomplete_plus.settings:
   mapping:
     token_string:
       type: string
+    number_of_matches:
+      type: integer

@@ -30,6 +30,17 @@ class EntityAutocompletePlusSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $admin_configurations = $this->config('entity_autocomplete_plus.settings');
+    $form['number_of_matches'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Number of matches'),
+      '#default_value' => $admin_configurations->get('number_of_matches') ? $admin_configurations->get('number_of_matches') : 10,
+      '#size' => 10,
+      '#maxlength' => 10,
+      '#description' => t("Default number of matches/suggestions to return."),
+      '#attributes' => array(
+        ' type' => 'number', // insert space before attribute name :)
+      ),
+    );
     $form['token_string'] = array(
       '#type' => 'textfield',
       '#title' => t('Append token string'),
@@ -48,6 +59,7 @@ class EntityAutocompletePlusSettingsForm extends ConfigFormBase {
     $config_values = $form_state->getValues();
     $config_fields = array(
       'token_string',
+      'number_of_matches'
     );
     $config = $this->config('entity_autocomplete_plus.settings');
     foreach ($config_fields as $config_field) {

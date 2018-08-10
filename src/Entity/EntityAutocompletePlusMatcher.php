@@ -16,9 +16,6 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
   // Injected EntityManager
   protected $entityManager;
 
-  // The number of matches to return
-  protected $n_match = 10;
-
   /**
    * Constructs a EntityAutocompletePlusMatcher object.
    *
@@ -49,11 +46,12 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
 
     $config = \Drupal::config('entity_autocomplete_plus.settings');
     $token_string = $config->get('token_string')? $config->get('token_string') : '';
+    $n_match = $config->get('number_of_matches')? $config->get('number_of_matches') : 10;
 
     if (isset($string)) {
       // Get an array of matching entities.
       $match_operator = !empty($selection_settings['match_operator']) ? $selection_settings['match_operator'] : 'CONTAINS';
-      $entity_labels = $handler->getReferenceableEntities($string, $match_operator, $this->n_match);
+      $entity_labels = $handler->getReferenceableEntities($string, $match_operator, $n_match);
 
       // Loop through the entities and convert them into autocomplete output.
       foreach ($entity_labels as $values) {
