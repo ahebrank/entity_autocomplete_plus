@@ -51,6 +51,7 @@ class EntityAutocompletePlusSettingsForm extends ConfigFormBase {
     );
     $form['token_string']['browser'] = [
       '#theme' => 'token_tree_link',
+      '#token_types' => 'all',
       '#global_types' => TRUE,
       '#show_nested' => FALSE,
     ];
