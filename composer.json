@@ -10,5 +10,7 @@
     "issues": "https://www.drupal.org/project/issues/entity_autocomplete_plus",
     "source": "http://cgit.drupalcode.org/entity_autocomplete_plus"
   },
-  "require": { }
+  "require": { 
+    "drupal/token": "^1.3"
+  }
 }

@@ -4,3 +4,5 @@ description: Let the entity autocomplete matcher provide additional information 
 core: 8.x
 package: Other
 configure: entity_autocomplete_plus.settings
+dependencies:
+  - drupal:token
