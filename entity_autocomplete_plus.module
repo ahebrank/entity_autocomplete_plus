@@ -73,8 +73,14 @@ function entity_autocomplete_plus_field_widget_form_alter(&$element, FormStateIn
     }
 
     if (isset($settings['token_string']) && $settings['token_string']) {
-      // inject the token string
-      $element['target_id']['#selection_settings']['token_string_suffix'] = $settings['token_string'];
+      // Inject the token string.
+      // Special case for IEF.
+      if (isset($element['#ief_id'])) {
+        $element['form']['entity_id']['#selection_settings']['token_string_suffix'] = $settings['token_string'];
+      }
+      elseif (isset($element['target_id'])) {
+        $element['target_id']['#selection_settings']['token_string_suffix'] = $settings['token_string'];
+      }
     }
   }
 }

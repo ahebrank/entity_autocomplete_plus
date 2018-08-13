@@ -43,10 +43,16 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
     ];
     $handler = $this->selectionManager->getInstance($options);
     $storage_controller = $this->entityManager->getStorage($target_type);
-
+    
+    // Global configuration.
     $config = \Drupal::config('entity_autocomplete_plus.settings');
-    $token_string = isset($selection_settings['token_string_suffix'])? $selection_settings['token_string_suffix'] : '';
     $n_match = $config->get('number_of_matches')? $config->get('number_of_matches') : 10;
+    $token_string = $config->get('token_string')? $config->get('token_string') : '';
+
+    // Per field, injected by entity_autocomplete_plus_field_widget_form_alter.
+    if (isset($selection_settings['token_string_suffix']) && $selection_settings['token_string_suffix']) {
+      $token_string = $selection_settings['token_string_suffix'];
+    }
 
     if (isset($string)) {
       // Get an array of matching entities.
@@ -85,6 +91,10 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
     else {
       $entity = $storage_controller->load($entity_id);
       $info = \Drupal::token()->replace($token_string, [$target_type => $entity]);
+      // If token replacement failed, blank the string.
+      if ($info == $token_string) {
+        $info = '';
+      }
       \Drupal::cache()->set($cid, $info);
     }
 
