@@ -4,15 +4,17 @@ namespace Drupal\entity_autocomplete_plus;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Modify the EntityAutocomplete service provider.
+ */
 class EntityAutocompletePlusServiceProvider implements ServiceModifierInterface {
 
   /**
-   * Modifies existing service definitions to override the entity autocomplete matcher
+   * The container under construction.
    *
-   * @param ContainerBuilder $container
+   * @param \Drupal\Core\DependencyInjection\ContainerBuilder $container
    *   The ContainerBuilder whose service definitions can be altered.
    */
   public function alter(ContainerBuilder $container) {
@@ -21,8 +23,8 @@ class EntityAutocompletePlusServiceProvider implements ServiceModifierInterface 
     $definition = $container->getDefinition($id);
     $definition->setClass('Drupal\entity_autocomplete_plus\Entity\EntityAutocompletePlusMatcher');
     $definition->setArguments([
-        new Reference('plugin.manager.entity_reference_selection'),
-        new Reference('entity.manager'),
+      new Reference('plugin.manager.entity_reference_selection'),
+      new Reference('entity.manager'),
     ]);
     $container->setDefinition($id, $definition);
   }

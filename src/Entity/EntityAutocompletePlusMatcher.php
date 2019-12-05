@@ -13,7 +13,11 @@ use Drupal\Core\Entity\EntityManagerInterface;
  */
 class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
 
-  // Injected EntityManager
+  /**
+   * The entity manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityManagerInterface
+   */
   protected $entityManager;
 
   /**
@@ -29,8 +33,8 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
     $this->entityManager = $entity_manager;
   }
 
-  /*
-   * {@inheritdoc]
+  /**
+   * {@inheritdoc}
    */
   public function getMatches($target_type, $selection_handler, $selection_settings, $string = '') {
 
@@ -43,11 +47,11 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
     ];
     $handler = $this->selectionManager->getInstance($options);
     $storage_controller = $this->entityManager->getStorage($target_type);
-    
+
     // Global configuration.
     $config = \Drupal::config('entity_autocomplete_plus.settings');
-    $n_match = $config->get('number_of_matches')? $config->get('number_of_matches') : 10;
-    $token_string = $config->get('token_string')? $config->get('token_string') : '';
+    $n_match = $config->get('number_of_matches') ? $config->get('number_of_matches') : 10;
+    $token_string = $config->get('token_string') ? $config->get('token_string') : '';
 
     // Per field, injected by entity_autocomplete_plus_field_widget_form_alter.
     if (isset($selection_settings['token_string_suffix']) && $selection_settings['token_string_suffix']) {
@@ -63,7 +67,8 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
       foreach ($entity_labels as $values) {
         foreach ($values as $entity_id => $label) {
           $info = $this->getEntityInfo($storage_controller, $token_string, $target_type, $entity_id);
-          $key = "$label ($entity_id)"; // probably don't mess with the key in case this is saved verbatim
+          // Probably don't mess with the key in case this is saved verbatim.
+          $key = "$label ($entity_id)";
           $label = "$label - $info ($entity_id)";
           // Strip things like starting/trailing white spaces, line breaks and
           // tags.
@@ -78,8 +83,8 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
     return $matches;
   }
 
-  /*
-   * return information about the entity for use in the matcher UI based on the token string
+  /**
+   * Return information about the entity for use in the matcher UI based on the token string.
    */
   private function getEntityInfo($storage_controller, $token_string, $target_type, $entity_id) {
     $info = '';

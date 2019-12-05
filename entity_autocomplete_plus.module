@@ -9,7 +9,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 
 /**
  * Implements hook_help().
@@ -27,6 +26,9 @@ function entity_autocomplete_plus_help($route_name, RouteMatchInterface $route_m
   }
 }
 
+/**
+ * Implements hook_field_widget_third_party_settings_form().
+ */
 function entity_autocomplete_plus_field_widget_third_party_settings_form(WidgetInterface $plugin, FieldDefinitionInterface $field_definition, $form_mode, $form, FormStateInterface $form_state) {
   $element = [];
   $type = $field_definition->getType();
@@ -61,9 +63,8 @@ function entity_autocomplete_plus_field_widget_third_party_settings_form(WidgetI
 
 /**
  * Implements hook_field_widget_form_alter().
-*/
+ */
 function entity_autocomplete_plus_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
-  $field_definition = $context['items']->getFieldDefinition();
   $type = $context['items']->getFieldDefinition()->getType();
 
   if ($type == 'entity_reference') {
@@ -91,10 +92,9 @@ function entity_autocomplete_plus_field_widget_form_alter(&$element, FormStateIn
 function entity_autocomplete_plus_field_widget_settings_summary_alter(&$summary, $context) {
   $field_definition = $context['field_definition'];
   $type = $field_definition->getType();
-  
+
   if ($type == 'entity_reference') {
     $settings = $context['widget']->getThirdPartySettings('entity_autocomplete_plus');
-    $plugin_id = $context['widget']->getPluginId();
 
     if (isset($settings['token_string']) && $settings['token_string']) {
       $summary[] = t('Append @token to autocomplete suggestions', [
