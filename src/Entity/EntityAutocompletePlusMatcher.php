@@ -6,7 +6,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Tags;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityAutocompleteMatcher;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Matcher class to get autocompletion results for entity reference.
@@ -16,7 +16,7 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
   /**
    * The entity manager service.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityManager;
 
@@ -25,10 +25,10 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
    *
    * @param \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $selection_manager
    *   The entity reference selection handler plugin manager.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   The entity manager.
    */
-  public function __construct(SelectionPluginManagerInterface $selection_manager, EntityManagerInterface $entity_manager) {
+  public function __construct(SelectionPluginManagerInterface $selection_manager, EntityTypeManagerInterface $entity_manager) {
     $this->selectionManager = $selection_manager;
     $this->entityManager = $entity_manager;
   }
