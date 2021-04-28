@@ -84,7 +84,7 @@ class EntityAutocompletePlusMatcher extends EntityAutocompleteMatcher {
   }
 
   /**
-   * Return information about the entity for use in the matcher UI based on the token string.
+   * Return information about the entity for use in the matcher UI.
    */
   private function getEntityInfo($storage_controller, $token_string, $target_type, $entity_id) {
     $info = '';
