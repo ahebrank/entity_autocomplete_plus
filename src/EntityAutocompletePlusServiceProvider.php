@@ -24,7 +24,7 @@ class EntityAutocompletePlusServiceProvider implements ServiceModifierInterface 
     $definition->setClass('Drupal\entity_autocomplete_plus\Entity\EntityAutocompletePlusMatcher');
     $definition->setArguments([
       new Reference('plugin.manager.entity_reference_selection'),
-      new Reference('entity.manager'),
+      new Reference('entity_type.manager'),
     ]);
     $container->setDefinition($id, $definition);
   }
