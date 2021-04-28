@@ -45,7 +45,7 @@ function entity_autocomplete_plus_field_widget_third_party_settings_form(WidgetI
       $element['token_string'] = [
         '#type' => 'textfield',
         '#title' => t('Append token string to autocomplete'),
-        '#default_value' => $settings['token_string'] ? $settings['token_string'] : '',
+        '#default_value' => $settings['token_string'] ?? '',
         '#size' => 60,
         '#maxlength' => 60,
         '#description' => t("Token string to include in entity reference matcher."),
